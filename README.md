@@ -1,6 +1,6 @@
 # Cryptogram
 Cryptogram is a comprehensive, full-stack web application designed to provide enterprise-grade security for file operations, including encryption, decryption, hashing, and secure cloud storage. Built with a focus on usability, security, and performance, Cryptogram bridges the gap between advanced cryptographic techniques &amp; friendly UI interaction.
-<br><br>
+
 ## Features
 **🔒 Core Security**
 * AES-256 & DES Encryption – Industry-standard symmetric encryption
@@ -26,7 +26,7 @@ Cryptogram is a comprehensive, full-stack web application designed to provide en
 * Hash Generation – Create unique fingerprints for any file
 * Integrity Checking – Verify files haven't been tampered with
 * Dual Storage – Hashes saved locally and in Dropbox
-* Tamper Detection – Instant alerts for modified files<br><br>
+* Tamper Detection – Instant alerts for modified files
 
 ## User Guide
 **1. Dashboard**
@@ -71,7 +71,7 @@ Cryptogram is a comprehensive, full-stack web application designed to provide en
 * Secure Memory Handling: Keys wiped from memory after use
 * Input Validation: Protection against injection attacks
 * HTTPS Ready: Built for secure deployment
-* No Metadata Leakage: Minimal information stored<br><br>
+* No Metadata Leakage: Minimal information stored
 
 ## 🔮 Future Roadmap
 **Planned Features**
