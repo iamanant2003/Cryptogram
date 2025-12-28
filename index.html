@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cryptogram | Encrypt, Decrypt & Store</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <div class="app-container">
+      <nav class="sidenav">
+        <div class="logo">
+          <i class="fas fa-lock"></i>
+          <span>Cryptogram</span>
+        </div>
+        <ul class="nav-menu">
+          <li class="active" data-section="dashboard">
+            <i class="fas fa-home"></i> Dashboard
+          </li>
+          <li data-section="encryption">
+            <i class="fas fa-key"></i> Encryption
+          </li>
+          <li data-section="storage">
+            <i class="fas fa-cloud"></i> Cloud Storage
+          </li>
+          <li data-section="verification">
+            <i class="fas fa-check-circle"></i> Verification
+          </li>
+          <li data-section="guide"><i class="fas fa-book"></i> User Guide</li>
+          <li data-section="settings"><i class="fas fa-cog"></i> Settings</li>
+        </ul>
+        <div class="user-profile">
+          <div class="avatar">U</div>
+          <span class="username">admin@securecrypt.com</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+      </nav>
+
+      <main class="main-content">
+        <header class="header">
+          <h1 id="section-title">Dashboard</h1>
+          <div class="header-actions">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" placeholder="Search files..." />
+            </div>
+            <div class="notifications">
+              <i class="fas fa-bell"></i>
+              <span class="badge">3</span>
+            </div>
+            <div class="dark-mode-toggle">
+              <label class="switch">
+                <input type="checkbox" id="darkModeToggle" />
+                <span class="slider round"></span>
+              </label>
+              <i class="fas fa-moon"></i>
+            </div>
+          </div>
+        </header>
+
+        <section id="dashboard" class="content-section active">
+          <div class="stats-container">
+            <div class="stat-card">
+              <div class="stat-icon bg-blue">
+                <i class="fas fa-lock"></i>
+              </div>
+              <div class="stat-info">
+                <h3>Encrypted Files</h3>
+                <p id="encrypted-count">0</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon bg-green">
+                <i class="fas fa-cloud"></i>
+              </div>
+              <div class="stat-info">
+                <h3>Stored Files</h3>
+                <p id="stored-count">0</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon bg-purple">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              <div class="stat-info">
+                <h3>Verified Files</h3>
+                <p id="verified-count">0</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="quick-actions">
+            <h2>Quick Actions</h2>
+            <div class="action-buttons">
+              <button class="action-btn" data-action="encrypt">
+                <i class="fas fa-key"></i>
+                <span>Encrypt File</span>
+              </button>
+              <button class="action-btn" data-action="store">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Store File</span>
+              </button>
+              <button class="action-btn" data-action="verify">
+                <i class="fas fa-check-double"></i>
+                <span>Verify File</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="recent-activity">
+            <h2>Recent Activity</h2>
+            <div class="activity-list" id="activity-feed">
+              <div class="activity-item">
+                <div class="activity-icon">
+                  <i class="fas fa-key"></i>
+                </div>
+                <div class="activity-details">
+                  <p>Encrypted "financial_report.xlsx"</p>
+                  <small>2 minutes ago</small>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-icon">
+                  <i class="fas fa-cloud"></i>
+                </div>
+                <div class="activity-details">
+                  <p>Stored "project_docs.zip" in cloud</p>
+                  <small>15 minutes ago</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="encryption" class="content-section">
+          <div class="section-header">
+            <h2>File Encryption</h2>
+            <div class="dropdown">
+              <button class="dropdown-btn">
+                <i class="fas fa-question-circle"></i> Help
+              </button>
+              <div class="dropdown-content">
+                <p>
+                  AES is recommended for most files. DES is provided for legacy
+                  compatibility.
+                </p>
+                <p>Remember your password - it cannot be recovered!</p>
+              </div>
+            </div>
+          </div>
+
+          <form id="encryption-form" class="operation-form">
+            <div class="form-group">
+              <label for="encryption-action">Action:</label>
+              <select id="encryption-action" class="modern-select">
+                <option value="encrypt">Encrypt File</option>
+                <option value="decrypt">Decrypt File</option>
+                <option value="hash">Generate Hash</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="encryption-algorithm">Algorithm:</label>
+              <select id="encryption-algorithm" class="modern-select">
+                <optgroup label="Encryption">
+                  <option value="AES">AES (Recommended)</option>
+                  <option value="DES">DES (Legacy)</option>
+                </optgroup>
+                <optgroup label="Hashing">
+                  <option value="SHA-256">SHA-256</option>
+                  <option value="SHA-512">SHA-512</option>
+                </optgroup>
+              </select>
+            </div>
+
+            <div class="form-group file-upload">
+              <label for="encryption-file">Select File:</label>
+              <div class="upload-area" id="encryption-upload-area">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Drag & drop files here or click to browse</p>
+                <input type="file" id="encryption-file" />
+              </div>
+            </div>
+
+            <div class="form-group" id="encryption-password-group">
+              <label for="encryption-password">Password:</label>
+              <div class="password-input">
+                <input
+                  type="password"
+                  id="encryption-password"
+                  placeholder="Enter secure password"
+                />
+                <i class="fas fa-eye toggle-password"></i>
+              </div>
+              <div class="password-strength">
+                <div class="strength-meter"></div>
+                <span class="strength-text"
+                  >Password Strength: <span>Weak</span></span
+                >
+              </div>
+            </div>
+
+            <div
+              class="form-group"
+              id="encryption-confirm-group"
+              style="display: none"
+            >
+              <label for="encryption-confirm">Confirm Password:</label>
+              <div class="password-input">
+                <input
+                  type="password"
+                  id="encryption-confirm"
+                  placeholder="Re-enter password"
+                />
+                <i class="fas fa-eye toggle-password"></i>
+              </div>
+            </div>
+            <div class="form-group" id="encryption-storage-group">
+              <label for="store-in-dropbox">
+                <input type="checkbox" id="store-in-dropbox" />
+                Also store a copy in Dropbox
+              </label>
+            </div>
+
+            <button type="submit" class="submit-btn">
+              <i class="fas fa-lock"></i> Process File
+            </button>
+          </form>
+        </section>
+
+        <section id="storage" class="content-section">
+          <div class="section-header">
+            <h2>Cloud Storage</h2>
+            <div class="storage-actions">
+              <button id="refresh-storage" class="icon-btn" title="Refresh">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+              <div class="dropdown">
+                <button class="dropdown-btn">
+                  <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <div class="dropdown-content">
+                  <a href="#" id="bulk-download"
+                    ><i class="fas fa-download"></i> Download All</a
+                  >
+                  <a href="#" id="bulk-delete"
+                    ><i class="fas fa-trash"></i> Delete All</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="storage-container">
+            <div class="storage-upload">
+              <h3>Store New File</h3>
+              <form id="storage-form" class="upload-box">
+                <div class="upload-area" id="storage-upload-area">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  <p>Drag & drop files here or click to browse</p>
+                  <input type="file" id="storage-file" />
+                </div>
+                <button type="submit" class="upload-btn">
+                  <i class="fas fa-cloud-upload-alt"></i> Upload to Cloud
+                </button>
+              </form>
+            </div>
+
+            <div class="storage-files">
+              <h3>Stored Files</h3>
+              <div class="file-table">
+                <div class="table-header">
+                  <div class="col-name">Filename</div>
+                  <div class="col-size">Size</div>
+                  <div class="col-date">Modified</div>
+                  <div class="col-actions">Actions</div>
+                </div>
+                <div class="table-body" id="storage-file-list">
+                  <div class="loading-row">
+                    <i class="fas fa-spinner fa-spin"></i> Loading files...
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="verification" class="content-section">
+          <div class="section-header">
+            <h2>File Verification</h2>
+            <div class="dropdown">
+              <button class="dropdown-btn">
+                <i class="fas fa-question-circle"></i> Help
+              </button>
+              <div class="dropdown-content">
+                <p>Verify file integrity by comparing hashes.</p>
+                <p>Upload a file and its hash to check if it's authentic.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="operation-form">
+            <div class="form-group">
+              <label for="verification-file">Select File to Verify:</label>
+              <div class="upload-area" id="verification-upload-area">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Drag & drop file here or click to browse</p>
+                <input type="file" id="verification-file" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="verification-hash"
+                >File Hash (SHA-256 or SHA-512):</label
+              >
+              <textarea
+                id="verification-hash"
+                placeholder="Paste the hash value here for comparison"
+                rows="3"
+                style="
+                  width: 100%;
+                  padding: 12px 15px;
+                  border: 1px solid #e9ecef;
+                  border-radius: 8px;
+                  resize: vertical;
+                "
+              ></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="verification-algorithm">Hash Algorithm:</label>
+              <select id="verification-algorithm" class="modern-select">
+                <option value="SHA-256">SHA-256</option>
+                <option value="SHA-512">SHA-512</option>
+              </select>
+            </div>
+
+            <button type="button" id="verify-hash-btn" class="submit-btn">
+              <i class="fas fa-check-circle"></i> Verify File
+            </button>
+
+            <div
+              id="verification-result"
+              style="margin-top: 20px; display: none"
+            >
+              <div
+                class="result-icon"
+                style="text-align: center; font-size: 3rem; margin-bottom: 15px"
+              >
+                <i class="fas fa-check-circle" style="color: #28a745"></i>
+              </div>
+              <div
+                class="result-message"
+                style="text-align: center; font-size: 1.2rem; font-weight: 500"
+              ></div>
+              <div
+                class="result-details"
+                style="
+                  margin-top: 15px;
+                  padding: 15px;
+                  background-color: #f8f9fa;
+                  border-radius: 8px;
+                "
+              >
+                <p>
+                  <strong>File:</strong> <span class="verified-filename"></span>
+                </p>
+                <p>
+                  <strong>Algorithm:</strong>
+                  <span class="verified-algorithm"></span>
+                </p>
+                <p>
+                  <strong>Provided Hash:</strong>
+                  <span
+                    class="provided-hash"
+                    style="word-break: break-all"
+                  ></span>
+                </p>
+                <p>
+                  <strong>Computed Hash:</strong>
+                  <span
+                    class="computed-hash"
+                    style="word-break: break-all"
+                  ></span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="operation-form" style="margin-top: 30px">
+            <h3>Generate Hash for a File</h3>
+            <p>
+              Create a hash that you can use later to verify file integrity.
+            </p>
+
+            <div class="form-group">
+              <label for="hash-generation-file">Select File:</label>
+              <div class="upload-area" id="hash-generation-upload-area">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Drag & drop file here or click to browse</p>
+                <input type="file" id="hash-generation-file" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="hash-generation-algorithm">Hash Algorithm:</label>
+              <select id="hash-generation-algorithm" class="modern-select">
+                <option value="SHA-256">SHA-256</option>
+                <option value="SHA-512">SHA-512</option>
+              </select>
+            </div>
+
+            <div class="form-group" id="hash-storage-group">
+              <label for="store-hash-in-dropbox">
+                <input type="checkbox" id="store-hash-in-dropbox" />
+                Also store hash in Dropbox
+              </label>
+            </div>
+
+            <button type="button" id="generate-hash-btn" class="submit-btn">
+              <i class="fas fa-hashtag"></i> Generate Hash
+            </button>
+
+            <div
+              id="hash-generation-result"
+              style="margin-top: 20px; display: none"
+            >
+              <div class="form-group">
+                <label>Generated Hash:</label>
+                <textarea
+                  id="generated-hash"
+                  rows="3"
+                  readonly
+                  style="
+                    width: 100%;
+                    padding: 12px 15px;
+                    border: 1px solid #e9ecef;
+                    border-radius: 8px;
+                    background-color: #f8f9fa;
+                  "
+                ></textarea>
+              </div>
+              <button
+                type="button"
+                id="copy-hash-btn"
+                class="submit-btn secondary"
+              >
+                <i class="fas fa-copy"></i> Copy to Clipboard
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section id="guide" class="content-section">
+          <div class="guide-container">
+            <h2>SecureCrypt User Guide</h2>
+
+            <div class="guide-tabs">
+              <button class="tab-btn active" data-tab="getting-started">
+                Getting Started
+              </button>
+              <button class="tab-btn" data-tab="encryption-guide">
+                Encryption
+              </button>
+              <button class="tab-btn" data-tab="storage-guide">
+                Cloud Storage
+              </button>
+              <button class="tab-btn" data-tab="security">Security</button>
+            </div>
+
+            <div class="tab-content active" id="getting-started">
+              <h3><i class="fas fa-rocket"></i> Getting Started</h3>
+              <p>
+                Welcome to SecureCrypt, your enterprise-grade file security
+                solution. Follow these steps to begin:
+              </p>
+
+              <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                  <h4>Create an Account</h4>
+                  <p>
+                    Register with your email and set up a strong master
+                    password. This gives you access to all SecureCrypt features.
+                  </p>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                  <h4>Configure Your Preferences</h4>
+                  <p>
+                    Visit the Settings section to customize your security
+                    preferences, default algorithms, and notification settings.
+                  </p>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                  <h4>Upload Your Files</h4>
+                  <p>
+                    Click on the "Encryption" tab and select files you want to
+                    secure. You can drag and drop or browse your device.
+                  </p>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                  <h4>Choose Security Method</h4>
+                  <p>
+                    Select between encryption (AES/DES) or hashing
+                    (SHA-256/SHA-512) based on your security needs.
+                  </p>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                  <h4>Set Password</h4>
+                  <p>
+                    For encryption, create a strong password (minimum 12
+                    characters recommended with mixed characters).
+                  </p>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-number">6</div>
+                <div class="step-content">
+                  <h4>Process & Download</h4>
+                  <p>
+                    Click "Process File" and download your secured file.
+                    Encrypted files will have a .enc extension.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-content" id="encryption-guide">
+              <h3><i class="fas fa-key"></i> Encryption Guide</h3>
+              <div class="guide-alert">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>
+                  Always remember your encryption password. Without it, your
+                  files cannot be recovered. We don't store passwords.
+                </p>
+              </div>
+
+              <h4>Algorithm Selection</h4>
+              <div class="comparison-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Algorithm</th>
+                      <th>Security Level</th>
+                      <th>Key Size</th>
+                      <th>Speed</th>
+                      <th>Recommended For</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>AES-256</td>
+                      <td>Military Grade</td>
+                      <td>256-bit</td>
+                      <td>Fast</td>
+                      <td>All sensitive documents, financial data</td>
+                    </tr>
+                    <tr>
+                      <td>DES</td>
+                      <td>Basic (Legacy)</td>
+                      <td>56-bit</td>
+                      <td>Very Fast</td>
+                      <td>Legacy systems only, non-critical data</td>
+                    </tr>
+                    <tr>
+                      <td>SHA-256</td>
+                      <td>Verification</td>
+                      <td>256-bit hash</td>
+                      <td>Instant</td>
+                      <td>File integrity checks, digital signatures</td>
+                    </tr>
+                    <tr>
+                      <td>SHA-512</td>
+                      <td>High Verification</td>
+                      <td>512-bit hash</td>
+                      <td>Fast</td>
+                      <td>Critical integrity verification, certificates</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h4>Encryption Process</h4>
+              <p>When you encrypt a file with SecureCrypt:</p>
+              <ol>
+                <li>
+                  Your password is combined with a randomly generated salt
+                </li>
+                <li>
+                  We use PBKDF2 key derivation with 100,000 iterations to create
+                  a secure key
+                </li>
+                <li>
+                  The file is encrypted using AES in CBC mode with a random
+                  initialization vector
+                </li>
+                <li>
+                  Salt, timestamp, and IV are prepended to the encrypted data
+                </li>
+                <li>
+                  The resulting file can only be decrypted with the correct
+                  password
+                </li>
+              </ol>
+
+              <h4>Best Practices</h4>
+              <ul class="best-practices">
+                <li>
+                  <i class="fas fa-check-circle"></i> Use different passwords
+                  for different files
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> Store passwords in a
+                  secure password manager
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> Encrypt files before cloud
+                  storage for added security
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> Regularly update your
+                  encryption passwords
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> Use the password strength
+                  meter to ensure strong passwords
+                </li>
+              </ul>
+            </div>
+
+            <div class="tab-content" id="storage-guide">
+              <h3><i class="fas fa-cloud"></i> Cloud Storage Guide</h3>
+
+              <div class="guide-alert">
+                <i class="fas fa-info-circle"></i>
+                <p>
+                  All files stored in the cloud are automatically compressed and
+                  encrypted for maximum security.
+                </p>
+              </div>
+
+              <h4>Storage Features</h4>
+              <div class="comparison-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Feature</th>
+                      <th>Description</th>
+                      <th>Benefit</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Automatic Compression</td>
+                      <td>Files are zipped before storage</td>
+                      <td>Saves storage space and bandwidth</td>
+                    </tr>
+                    <tr>
+                      <td>Secure Cloud Backup</td>
+                      <td>Encrypted storage on Dropbox servers</td>
+                      <td>Redundant, secure off-site storage</td>
+                    </tr>
+                    <tr>
+                      <td>File Versioning</td>
+                      <td>Previous versions are maintained</td>
+                      <td>Recover from accidental changes</td>
+                    </tr>
+                    <tr>
+                      <td>Access Anywhere</td>
+                      <td>Retrieve files from any device</td>
+                      <td>Work seamlessly across platforms</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h4>Storage Process</h4>
+              <ol>
+                <li>Files are compressed into ZIP format to save space</li>
+                <li>Metadata is preserved (filename, modification date)</li>
+                <li>Files are securely transmitted to Dropbox servers</li>
+                <li>
+                  You can access stored files from any device with your
+                  credentials
+                </li>
+                <li>Files can be retrieved individually or in bulk</li>
+              </ol>
+
+              <h4>Storage Limitations</h4>
+              <ul class="best-practices">
+                <li>
+                  <i class="fas fa-check-circle"></i> Maximum file size: 2GB per
+                  file
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> Total storage: 50GB
+                  standard account
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> File retention: 30 days
+                  for free accounts
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> Supported formats: All
+                  file types
+                </li>
+              </ul>
+
+              <h4>Best Practices</h4>
+              <ul class="best-practices">
+                <li>
+                  <i class="fas fa-check-circle"></i> Encrypt sensitive files
+                  before storage
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> Organize files with clear
+                  naming conventions
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> Regularly clean up unused
+                  files
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> Use the bulk operations
+                  for managing multiple files
+                </li>
+              </ul>
+            </div>
+
+            <div class="tab-content" id="security">
+              <h3><i class="fas fa-shield-alt"></i> Security Guide</h3>
+
+              <div class="guide-alert">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>
+                  Security is a shared responsibility. Follow these guidelines
+                  to maximize your protection.
+                </p>
+              </div>
+
+              <h4>Security Features</h4>
+              <div class="comparison-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Feature</th>
+                      <th>Description</th>
+                      <th>Protection Against</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>End-to-End Encryption</td>
+                      <td>Files encrypted before leaving your device</td>
+                      <td>Data interception, man-in-the-middle attacks</td>
+                    </tr>
+                    <tr>
+                      <td>Password Hashing</td>
+                      <td>PBKDF2 with 100,000 iterations and salt</td>
+                      <td>Password cracking, rainbow table attacks</td>
+                    </tr>
+                    <tr>
+                      <td>Secure Key Storage</td>
+                      <td>Encryption keys stored separately from data</td>
+                      <td>Data breach scenarios</td>
+                    </tr>
+                    <tr>
+                      <td>File Expiration</td>
+                      <td>Automatic deletion after 5 minutes</td>
+                      <td>Unauthorized access to temporary files</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h4>Verification System</h4>
+              <p>SecureCrypt includes a robust file verification system:</p>
+              <ol>
+                <li>Generate cryptographic hashes for your files</li>
+                <li>Hashes are stored securely in separate location</li>
+                <li>Verify file integrity at any time by comparing hashes</li>
+                <li>Detect any tampering or corruption immediately</li>
+              </ol>
+
+              <h4>Threat Protection</h4>
+              <ul class="best-practices">
+                <li>
+                  <i class="fas fa-check-circle"></i> Protection against brute
+                  force attacks
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> Automatic encryption of
+                  temporary files
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> Secure deletion of
+                  temporary files
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> Regular security updates
+                  and patches
+                </li>
+              </ul>
+
+              <h4>Security Best Practices</h4>
+              <ul class="best-practices">
+                <li>
+                  <i class="fas fa-check-circle"></i> Use strong, unique
+                  passwords for each file
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> Enable two-factor
+                  authentication where available
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> Regularly verify your
+                  stored files' integrity
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> Keep your software and
+                  systems updated
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> Be cautious of phishing
+                  attempts
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> Log out from shared
+                  devices after use
+                </li>
+              </ul>
+
+              <h4>Compliance</h4>
+              <p>SecureCrypt helps you meet compliance requirements for:</p>
+              <ul class="best-practices">
+                <li>
+                  <i class="fas fa-check-circle"></i> GDPR - General Data
+                  Protection Regulation
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> HIPAA - Health Insurance
+                  Portability and Accountability Act
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> PCI DSS - Payment Card
+                  Industry Data Security Standard
+                </li>
+                <li>
+                  <i class="fas fa-check-circle"></i> SOX - Sarbanes-Oxley Act
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="settings" class="content-section">
+          <div class="operation-form">
+            <h2>Application Settings</h2>
+
+            <div class="form-group">
+              <h3><i class="fas fa-sliders-h"></i> Preferences</h3>
+
+              <div class="preference-item">
+                <label for="default-algorithm"
+                  >Default Encryption Algorithm:</label
+                >
+                <select id="default-algorithm" class="modern-select">
+                  <option value="AES">AES (Recommended)</option>
+                  <option value="DES">DES (Legacy)</option>
+                </select>
+              </div>
+
+              <div class="preference-item">
+                <label for="auto-delete">
+                  <input type="checkbox" id="auto-delete" checked />
+                  Automatically delete temporary files after processing
+                </label>
+              </div>
+
+              <div class="preference-item">
+                <label for="cloud-auto-sync">
+                  <input type="checkbox" id="cloud-auto-sync" checked />
+                  Automatically sync with cloud storage
+                </label>
+              </div>
+
+              <div class="preference-item">
+                <label for="file-expiration">File expiration time:</label>
+                <select id="file-expiration" class="modern-select">
+                  <option value="5">5 minutes</option>
+                  <option value="15">15 minutes</option>
+                  <option value="30">30 minutes</option>
+                  <option value="60">1 hour</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <h3><i class="fas fa-bell"></i> Notifications</h3>
+
+              <div class="preference-item">
+                <label for="notify-encrypt">
+                  <input type="checkbox" id="notify-encrypt" checked />
+                  Notify when encryption completes
+                </label>
+              </div>
+
+              <div class="preference-item">
+                <label for="notify-decrypt">
+                  <input type="checkbox" id="notify-decrypt" checked />
+                  Notify when decryption completes
+                </label>
+              </div>
+
+              <div class="preference-item">
+                <label for="notify-upload">
+                  <input type="checkbox" id="notify-upload" checked />
+                  Notify when cloud upload completes
+                </label>
+              </div>
+
+              <div class="preference-item">
+                <label for="notify-download">
+                  <input type="checkbox" id="notify-download" checked />
+                  Notify when cloud download completes
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <h3><i class="fas fa-paint-brush"></i> Appearance</h3>
+
+              <div class="preference-item">
+                <label for="theme-select">Theme:</label>
+                <select id="theme-select" class="modern-select">
+                  <option value="light">Light</option>
+                  <option value="dark">Dark</option>
+                  <option value="auto">Auto (System Preference)</option>
+                </select>
+              </div>
+
+              <div class="preference-item">
+                <label for="font-size">Font Size:</label>
+                <select id="font-size" class="modern-select">
+                  <option value="small">Small</option>
+                  <option value="medium" selected>Medium</option>
+                  <option value="large">Large</option>
+                </select>
+              </div>
+
+              <div class="preference-item">
+                <label for="animations">
+                  <input type="checkbox" id="animations" checked />
+                  Enable animations and transitions
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <h3><i class="fas fa-database"></i> Data Management</h3>
+
+              <div class="preference-item">
+                <button id="clear-cache" class="action-btn">
+                  <i class="fas fa-broom"></i> Clear Local Cache
+                </button>
+                <span class="help-text"
+                  >Clear temporarily stored files and data</span
+                >
+              </div>
+
+              <div class="preference-item">
+                <button id="export-settings" class="action-btn">
+                  <i class="fas fa-file-export"></i> Export Settings
+                </button>
+                <span class="help-text"
+                  >Backup your configuration to a file</span
+                >
+              </div>
+
+              <div class="preference-item">
+                <button id="import-settings" class="action-btn">
+                  <i class="fas fa-file-import"></i> Import Settings
+                </button>
+                <input
+                  type="file"
+                  id="settings-file"
+                  accept=".json"
+                  style="display: none"
+                />
+                <span class="help-text"
+                  >Restore configuration from a backup file</span
+                >
+              </div>
+
+              <div class="preference-item">
+                <button id="reset-settings" class="action-btn danger">
+                  <i class="fas fa-trash"></i> Reset to Defaults
+                </button>
+                <span class="help-text"
+                  >Restore all settings to factory defaults</span
+                >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <h3><i class="fas fa-tachometer-alt"></i> Performance</h3>
+
+              <div class="preference-item">
+                <label for="max-parallel">Maximum parallel operations:</label>
+                <select id="max-parallel" class="modern-select">
+                  <option value="1">1 operation</option>
+                  <option value="2">2 operations</option>
+                  <option value="3" selected>3 operations</option>
+                  <option value="5">5 operations</option>
+                </select>
+              </div>
+
+              <div class="preference-item">
+                <label for="chunk-size">File processing chunk size:</label>
+                <select id="chunk-size" class="modern-select">
+                  <option value="1">1MB (Slower but stable)</option>
+                  <option value="5" selected>5MB (Balanced)</option>
+                  <option value="10">10MB (Faster, needs more memory)</option>
+                </select>
+              </div>
+
+              <div class="preference-item">
+                <label for="compression-level">Compression level:</label>
+                <select id="compression-level" class="modern-select">
+                  <option value="1">Fastest (Less compression)</option>
+                  <option value="6" selected>Balanced</option>
+                  <option value="9">Maximum (Slowest)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button id="save-settings" class="submit-btn">
+                <i class="fas fa-save"></i> Save All Settings
+              </button>
+              <button id="cancel-changes" class="submit-btn secondary">
+                <i class="fas fa-times"></i> Cancel Changes
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="status-bar">
+        <div class="status-item">
+          <i class="fas fa-cloud"></i>
+          <span>Dropbox: Connected</span>
+        </div>
+        <div class="status-item">
+          <i class="fas fa-shield-alt"></i>
+          <span>Security: Active</span>
+        </div>
+        <div class="status-item">
+          <i class="fas fa-database"></i>
+          <span>Storage: 15.2GB/50GB</span>
+        </div>
+        <div class="status-item">
+          <i class="fas fa-clock"></i>
+          <span id="current-time">Loading...</span>
+        </div>
+      </footer>
+    </div>
+
+    <div class="loading-overlay" id="loading-overlay">
+      <div class="loading-content">
+        <div class="spinner"></div>
+        <p>Processing your request...</p>
+      </div>
+    </div>
+
+    <div class="modal" id="confirmation-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="modal-title">Confirm Action</h3>
+          <span class="close-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+          <p id="modal-message">
+            Are you sure you want to perform this action?
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button class="modal-btn secondary" id="modal-cancel">Cancel</button>
+          <button class="modal-btn primary" id="modal-confirm">Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="alerts-container"></div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>
